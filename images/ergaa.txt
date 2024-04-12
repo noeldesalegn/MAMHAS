@@ -1,0 +1,266 @@
+<?php 
+	session_start();
+	if(isset($_SESSION['FName']))
+	{
+		include "config.php"; 
+?>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<meta name="viewport" content="width=device-width" />
+<head>
+<style>
+  label{
+color:white;
+  }
+  body{
+    background-color:#47555c;
+  }
+  span{
+	  color:#673ab7;
+	 // font-weight:bold;
+  }
+.container {
+  border: 2px solid #dedede;
+  background-color:  #5896EB ;
+  border-radius: 5px;
+  color: white ;
+  width:auto;
+  font-size:12px;
+  overflow: hidden;
+}
+.container1 {
+  border: 2px solid #dedede;
+  background-color: #138d75 ;
+  border-radius: 5px;
+  color: white ;
+  width:auto;
+font-size:12px;
+  overflow: hidden;
+
+}
+
+  .btn-primary {
+    background-color: #673AB7;
+	}
+	
+	.message{
+		color: green;
+		border-radius: 1px;
+       border-radius: 5px;
+       font-weight:bold;
+       border-radius: 1px;
+       border-radius: 5px;
+       background-color: #1a5276 ;
+        overflow: auto;
+	}
+ 
+    .time-right {
+  float: right;
+  color: black;
+}
+    .time-left {
+  float: right;
+  color: black;
+}
+.bubble {
+        position: relative;
+            background: #0964ed;
+                color: #FFFFFF;
+                    font-family: Arial;
+                        font-size: 20px;
+                            line-height: 33px;
+                                text-align: right;
+                                    width: 349px;
+                                        height: 62px;
+                                            border-radius: 10px;
+                                                padding: 0px;
+                                                }
+                                                .bubble:after {
+                                                    content: '';
+                                                        position: relative;
+                                                            display: block;
+                                                                width: 0;
+                                                                    z-index: 1;
+                                                                        border-style: solid;
+                                                                            border-width: 20px 20px 0 0;
+                                                                                border-color: #0964ed transparent transparent transparent;
+                                                                                    bottom: -20px;
+                                                                                        left: 8%;
+                                                                                            margin-left: -10px;
+                                                                                            }
+.bubbler {
+        position: relative;
+            background: #807918;
+                color: #FFFFFF;
+                    font-family: Arial;
+                        font-size: 20px;
+                            line-height: 33px;
+                                text-align: center;
+                                    width: 349px;
+                                        height: 62px;
+                                            border-radius: 10px;
+                                                padding: 0px;
+                                                }
+                                                .bubbler:after {
+                                                    content: '';
+                                                        position: absolute;
+                                                            display: block;
+                                                                width: 0;
+                                                                    z-index: 1;
+                                                                        border-style: solid;
+                                                                            border-width: 0 7px 20px 0;
+                                                                                border-color: transparent #807918 transparent transparent;
+                                                                                    bottom: -20px;
+                                                                                        left: 92%;
+                                                                                            margin-left: -3.5px;
+                                                                                            
+}                                                                          </style>
+  </head>
+  <body>
+
+	  <center> <span class="message"><div class="message">
+	<?php
+		if (isset($_SESSION['flash_message'])){
+			echo $_SESSION['flash_message'];
+		}
+		unset($_SESSION['flash_message']);
+	?>
+	</div></span></center>
+
+<?php
+        		$sql = "SELECT * FROM `user` where user_account_name = '".$_SESSION['user_account_name']."'  and password = '".$_SESSION['password']."'  ";
+
+		$query =  mysqli_query($conn, $sql);
+		$row = mysqli_fetch_assoc($query);
+            
+  if($row['user_account_type'] == 'mother') {
+      		$sql = "SELECT * FROM `Message` where sender = '".$_SESSION['FName']."'  ";
+            $sql1 = "SELECT * FROM `Message` where reciever = '".$_SESSION['FName']."' ";
+	  $query = mysqli_query($conn,$sql);
+      $query1 = mysqli_query($conn,$sql1);
+        if(mysqli_num_rows($query)>0)
+	{
+		while($row= mysqli_fetch_assoc($query))	
+		{
+      
+?>
+
+<div class="bubble">
+  <?php echo $row['msgcontent']; ?><br>
+</div><br>
+<?php
+  }
+          if(mysqli_num_rows($query1)>0)
+
+  		while($row1= mysqli_fetch_assoc($query1))	
+		{
+      
+?>
+
+<div class="bubbler">
+  <?php echo $row1['msgcontent']; ?><br>
+</div><br>
+<?php
+        }
+  
+    }
+        }
+         elseif($row['user_account_type'] == 'physician') {
+      		$sql = "SELECT * FROM `Message` where sender = '".$_SESSION['FName']."'  ";
+            $sql1 = "SELECT * FROM `Message` where reciever = '".$_SESSION['FName']."'  ";
+	  $query = mysqli_query($conn,$sql);
+      $query1 = mysqli_query($conn,$sql1);
+        if(mysqli_num_rows($query)>0)
+	{
+		while($row= mysqli_fetch_assoc($query))	
+		{
+      
+?>
+
+<div class="container">
+  <p><?php echo $row['msgcontent']; ?></p>
+ <span class="time-right">sent to <?php echo $row['reciever']; ?></span><br>
+  <span class="time-right"> <?php echo $row['date_time']; ?></span>
+</div><br>
+<?php
+  }
+          if(mysqli_num_rows($query1)>0)
+
+  		while($row1= mysqli_fetch_assoc($query1))	
+		{
+      
+?>
+
+<div class="container1">
+  <p align="left"><?php echo $row1['msgcontent']; ?></p>
+ <span class="time-right">Recieved From  <?php echo $row1['sender']; ?></span><br>
+  <span class="time-right"> <?php echo $row1['date_time']; ?></span>
+</div><br>
+<?php
+        }
+  
+    }
+        }
+
+        	else
+	{
+?>
+<div class="message">
+			<p>
+				No previous chat available.
+			</p>
+</div>
+<?php
+	}  
+?>
+     
+  <br><br><br>
+  <form class="form-horizontal" method="post" action="sendMessage.php">
+
+        <textarea name="msg" placeholder="Type your message here..." class="form-control"  required ></textarea>
+    
+        <br>  
+        Send Message To <?php
+        		$sql = "SELECT * FROM `user` where user_account_name = '".$_SESSION['user_account_name']."'  and password = '".$_SESSION['password']."'  ";
+
+		$query =  mysqli_query($conn, $sql);
+		$row = mysqli_fetch_assoc($query);
+            
+  if($row['user_account_type'] == 'mother') { ?>
+      <select name="reciever" required  >
+
+       <?php   
+       
+        $sql = "SELECT FName , LName  FROM user WHERE user_account_type ='physician' ";
+                        $result = mysqli_query($conn, $sql);
+                while($row = mysqli_fetch_assoc($result)) {
+          echo "<option value='".$row['FName']."'>".$row['FName']."</option>";    }   ?>
+       </select> <?php } 
+       else { ?>  
+ <select name="reciever" required  > <?php
+       
+        $sql = "SELECT FName , LName  FROM user WHERE user_account_type ='mother' ";
+                        $result = mysqli_query($conn, $sql);
+                while($row = mysqli_fetch_assoc($result)) {
+          echo "<option value='".$row['FName']."'>".$row['FName']."</option>";    }   ?>
+       </select>
+      <?php } ?>
+ <br>
+     
+      
+        <center><button type="submit" class="btn btn-primary">Send</button></center>
+      
+  </form>
+
+</body>
+</html>
+<?php
+	}
+	else
+	{
+		header('location:index.php');
+	}
+?>

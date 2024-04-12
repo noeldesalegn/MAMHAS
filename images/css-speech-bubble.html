@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+.bubble {
+    position: relative;
+    background: #52b8eb;
+    color: #FFFFFF;
+    font-family: Arial;
+    font-size: 20px;
+    line-height: 120px;
+    text-align: center;
+    width: 250px;
+    height: 120px;
+    border-radius: 10px;
+    padding: 0px;
+}
+.bubble:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    z-index: 1;
+    border-style: solid;
+    border-width: 20px 20px 0 0;
+    border-color: #52b8eb transparent transparent transparent;
+    bottom: -20px;
+    left: 9%;
+    margin-left: -10px;
+}
+
+</style>
+</head>
+<body>
+<div class="bubble">CSS Speech Bubble</div>
+
+</body>
+</html>
